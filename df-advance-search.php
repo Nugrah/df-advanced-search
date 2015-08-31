@@ -1,106 +1,88 @@
 <?php
 
 /*
-Plugin Name: Dahz DF Advance Search
+Plugin Name: Dahz Advance Search
 Plugin URL: http://dahztheme.com/
 Description:  Enhance default Wordpress Search Form
 Version: 1.0.0
 Author: Dahz
 Author URI: http://dahztheme.com/
+License: GPL2
 */
 
 if ( ! defined('ABSPATH') ) { exit; }
 
 /**
- * new WordPress Widget format
- * Wordpress 2.8 and above
- * @see http://codex.wordpress.org/Widgets_API#Developing_Widgets
+ * Adds Foo_Widget widget.
  */
-class df_advanceSearch_Widget extends WP_Widget {
+class Dahz_advance_search extends WP_Widget {
 
-    /**
-     * Constructor
-     *
-     * @return void
-     **/
-    function df_advanceSearch_Widget() {
-        $widget_ops = array( 'classname' => 'advance-search-widget', 'description' => __('This widget is display an advance search', 'dahztheme') );
-        
-        $this->WP_Widget( 'advance-search-widget', __('DF Widget - Advance Search Form', 'dahztheme'), $widget_ops );
-    }
+	/**
+	 * Register widget with WordPress.
+	 */
+	function __construct() {
+		WP_Widget::__construct(
+			'foo_widget', // Base ID
+			__( 'Dahz Advance Search', 'dahztheme' ), // Name
+			array( 'description' => __( 'Enhance default Wordpress Search Form', 'text_domain' ), ) // Args
+		);
+	}
 
-    /**
-     * Outputs the HTML for this widget.
-     *
-     * @param array  An array of standard parameters for widgets in this theme
-     * @param array  An array of settings for this widget instance
-     * @return void Echoes it's output
-     **/
-    function widget( $args, $instance ) {
-        extract( $args, EXTR_SKIP );
+	/**
+	 * Front-end display of widget.
+	 *
+	 * @see WP_Widget::widget()
+	 *
+	 * @param array $args     Widget arguments.
+	 * @param array $instance Saved values from database.
+	 */
+	public function widget( $args, $instance ) {
+		echo $args['before_widget'];
+		if ( ! empty( $instance['title'] ) ) {
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+		}
+		echo $args['after_widget'];
+	}
 
-        $title 	= apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
+	/**
+	 * Back-end widget form.
+	 *
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	public function form( $instance ) {
+		$title = ! empty( $instance['title'] );
+		?>
+            <p>
+                  <label for="<?php echo $this->get_field_id('title') ?>">
+                  <?php echo __('Title: '); ?>
+                  <input class="widefat"/>
+                  </label>
+            </p>
+		<?php
+	}
 
-        echo $before_widget;
+	/**
+	 * Sanitize widget form values as they are saved.
+	 *
+	 * @see WP_Widget::update()
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 
-        if ($title) {
-            echo $before_title . esc_attr( $title ) . $after_title;
-        } // End IF Statement
+		return $instance;
+	}
 
-        echo $after_title;
-
-    //
-    // Widget display logic goes here
-    //
-
-    echo $after_widget;
-    }
-
-    /**
-     * Deals with the settings when they are saved by the admin. Here is
-     * where any validation should be dealt with.
-     *
-     * @param array  An array of new settings as submitted by the admin
-     * @param array  An array of the previous settings
-     * @return array The validated and (if necessary) amended settings
-     **/
-    function update( $new_instance, $old_instance ) {
-
-        // update logic goes here
-        $updated_instance = $new_instance;
-        return $updated_instance;
-    }
-
-    /**
-     * Displays the form for this widget on the Widgets page of the WP Admin area.
-     *
-     * @param array  An array of the current settings for this widget
-     * @return void Echoes it's output
-     **/
-    function form( $instance ) {
-        $defaults = array('title' => __('Advance Search', 'dahztheme'), 'adcode' => '', 'image' => '', 'href' => '', 'alt' => '');
-        
-        $instance = wp_parse_args( (array) $instance, $defaults );
-
-        $read_only = '';
-        if ( !current_user_can('unfiltered_html') ) {
-        	$read_only = 'readonly="readonly"';
-        }
-
-        ?>
-
-			<p>
-				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title (Optional):', 'dahztheme'); ?></label>	
-				<input type="text" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo esc_attr($instance['title']); ?>" class="" id="<?php echo $this->get_field_id('title'); ?>">
-			</p>
-
-        <?php
-
-        // display field names here using:
-        // $this->get_field_id( 'option_name' ) - the CSS ID
-        // $this->get_field_name( 'option_name' ) - the HTML name
-        // $instance['option_name'] - the option value
-    }
+} // class Dahz_advance_search
+// register Dahz_advance_search widget
+function register_foo_widget() {
+    register_widget( 'Dahz_advance_search' );
 }
-
-add_action( 'widgets_init', create_function( '', "register_widget( 'df_advanceSearch_Widget' );" ) );
+add_action( 'widgets_init', 'register_foo_widget' );
