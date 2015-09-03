@@ -1,0 +1,62 @@
+/*
+Style css for dahz advance search
+*/
+
+.searchform{
+	width: 100%;
+}
+input.search-field {
+	background-color: rgba(245, 245, 245, 0.25);
+	border-radius: 4px;
+	-webkit-transition: all 0.1s linear 0s;
+	-moz-transition: all 0.1s linear 0s;
+	-o-transition: all 0.1s linear 0s;
+	-ms-transition: all 0.1s linear 0s;
+	transition: all 0.1s linear 0s;
+}
+.searchform .search-field:hover{
+	background-color: rgba(245, 245, 245, 1);
+	border-color: #D7D7D7;
+	-webkit-transition: all 0.1s linear 0s;
+	-moz-transition: all 0.1s linear 0s;
+	-o-transition: all 0.1s linear 0s;
+	-ms-transition: all 0.1s linear 0s;
+	transition: all 0.1s linear 0s;
+}
+/* Auto suggestion */
+.searchtext{
+	position:relative
+}
+.searchtext .suggestion{
+	position:absolute;
+	left:0;
+	top:46px;
+	width:100%;
+	background:#FCFCFC;
+	border:1px solid #BEBEBE;
+	display:none;
+	overflow:hidden;
+}
+.searchform .suggestion{
+	top:31px
+}
+.searchtext .suggestion li{
+	overflow:hidden;
+	/*margin-bottom: 10px;*/
+}
+.searchtext .suggestion li a{
+	padding: 0 0 20px 0;
+	display:block;
+	vertical-align: middle;
+	text-decoration:none;
+	color:#606060;
+	line-height:1em;
+	height:14px;
+}
+.searchtext .suggestion li.active a{
+	background:#E0F1FC
+}
+.suggestion ul{
+	margin: 0;
+	padding: 5px;
+}
